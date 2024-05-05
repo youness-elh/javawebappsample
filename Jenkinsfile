@@ -24,31 +24,10 @@ node {
       // login Azure
       withCredentials([azureServicePrincipal(credentialsId: 'AzureServicePrincipal')]) {
        sh '''
-          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID --allow-no-subscriptions
-          #az account set -s $AZURE_SUBSCRIPTION_ID
-        '''
-      }
-
-      // get publish settings
-      def pubProfilesJson = sh script: "az webapp deployment list-publishing-profiles -g $resourceGroup -n $webAppName", returnStdout: true
-      def ftpProfile = getFtpPublishProfile pubProfilesJson
-      // upload package
-      sh "curl -T target/calculator-1.0.war $ftpProfile.url/webapps/ROOT.war -u '$ftpProfile.username:$ftpProfile.password'"
-      // log out
-      sh 'az logout'
-      sh 'mvn clean package'
-    }
-  
-    stage('deploy') {
-      def resourceGroup = 'jenkins-get-started-rg-y'
-      def webAppName = 'appyouness'
-      // login Azure
-      withCredentials([azureServicePrincipal(credentialsId: 'AzureServicePrincipal')]) {
-       sh '''
-          az logout
+          az logout'
           az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID 
           #--allow-no-subscriptions
-          az account set -s $AZURE_SUBSCRIPTION_ID
+          #az account set -s $AZURE_SUBSCRIPTION_ID
         '''
       }
 
