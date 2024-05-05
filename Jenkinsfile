@@ -30,7 +30,7 @@ node {
         '''
       }
       */
-      withCredentials([azureServicePrincipal(credentialsId: 'my-azure-credentials', variable: 'AZURE_CREDENTIALS')]) {
+      withCredentials([azureServicePrincipal(credentialsId: 'AzureServicePrincipal', variable: 'AZURE_CREDENTIALS')]) {
       sh '''
         az login --service-principal -u $AZURE_CREDENTIALS_CLIENT_ID -p $AZURE_CREDENTIALS_CLIENT_SECRET -t $AZURE_CREDENTIALS_TENANT_ID
         az account set -s $AZURE_CREDENTIALS_SUBSCRIPTION_ID
