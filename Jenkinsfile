@@ -22,19 +22,12 @@ node {
       def resourceGroup = 'jenkins-get-started-rg-y'
       def webAppName = 'appyouness'
       // login Azure
-      /*
       withCredentials([usernamePassword(credentialsId: 'AzureServicePrincipal', passwordVariable: 'd2v8Q~gpVsK4-.FKhSgGIjXXlmLkqKb4Ijo7gcnV', usernameVariable: '7454a61d-a99c-45d0-82e1-321eea3031f4')]) {
        sh '''
           az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
           az account set -s $AZURE_SUBSCRIPTION_ID
         '''
       }
-      */
-      withCredentials([azureServicePrincipal(credentialsId: 'AzureServicePrincipal', variable: 'AZURE_CREDENTIALS')]) {
-      sh '''
-        az login --service-principal -u $AZURE_CREDENTIALS_CLIENT_ID -p $AZURE_CREDENTIALS_CLIENT_SECRET -t $AZURE_CREDENTIALS_TENANT_ID
-        az account set -s $AZURE_CREDENTIALS_SUBSCRIPTION_ID
-      '''
 }
 
       // get publish settings
