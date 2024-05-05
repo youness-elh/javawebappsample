@@ -24,7 +24,9 @@ node {
       // login Azure
       withCredentials([azureServicePrincipal(credentialsId: 'AzureServicePrincipal')]) {
        sh '''
-          echo $AZURE_CLIENT_ID
+          if [ $AZURE_TENANT_ID -eq 'dab7d5be-3d32-41f6-b6b4-f31ecf90c7af' ]; then
+            echo "The numbers are equal."
+          fi
           az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
           az account set -s $AZURE_SUBSCRIPTION_ID
         '''
