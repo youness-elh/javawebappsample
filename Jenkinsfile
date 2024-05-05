@@ -18,7 +18,23 @@ node {
       sh 'mvn clean package'
     }
   
-    
+    stage('deploy') {
+      def resourceGroup = 'jenkins-get-started-rg-y'
+      def webAppName = 'appyouness'
+      // login Azure
+      withCredentials([usernamePassword(credentialsId: 'dab7d5be-3d32-41f6-b6b4-f31ecf90c7af', passwordVariable: 'd2v8Q~gpVsK4-.FKhSgGIjXXlmLkqKb4Ijo7gcnV', usernameVariable: '7454a61d-a99c-45d0-82e1-321eea3031f4')]) {
+       sh '''
+          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
+          az account set -s $AZURE_SUBSCRIPTION_ID
+        '''
+      }
+      // get publish settings
+      def pubProfilesJson = sh script: "az webapp deployment list-publishing-profiles -g $resourceGroup -n $webAppName", returnStdout: true
+      def ftpProfile = getFtpPublishProfile pubProfilesJson
+      // upload package
+      sh "curl -T target/calculator-1.0.war $ftpProfile.url/webapps/ROOT.war -u '$ftpProfile.username:$ftpProfile.password'"
+      // log out
+      sh 'az logout'
     }
   }
 }
